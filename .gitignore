@@ -1,0 +1,9 @@
+#vim swapfiles
+*.swp
+
+#Binary artifacts
+obj/*
+
+
+#Final disk image
+hdd_image
