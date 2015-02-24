@@ -20,7 +20,7 @@ hdd_image: $(TARGETS) $(UTILS)
 	@echo -e "\n-- Setting up Partition Table (1 Partition) -- \n"
 	#initialize it with one FAT16 partition
 	parted -s $@ mktable msdos
-	parted -s $@ unit S mkpart p fat16 34 64260
+	parted -s $@ unit S mkpart p fat16 2048 64260
 	parted -s $@ set 1 boot on
 	@echo -e "\n-- Creating Filesystem (FAT$(FAT)) --\n"
 	sudo kpartx -a $@

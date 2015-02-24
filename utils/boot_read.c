@@ -71,7 +71,22 @@ void printBits(size_t const size, void const * const ptr)
         }
     }
 }
-
+void print_chs(const chs_addr_t *addr) {
+		printf("\tH: ");
+		printBits(sizeof(uint8_t),&(addr->track));
+		printf("(%u)\tC: ",addr->track);
+		uint16_t merged_cylinders = 0b0000000011000000;
+		merged_cylinders &= addr->sector; // Grab hte high 2 bits
+		merged_cylinders <<= 2;
+		merged_cylinders |= addr->cylinder;
+		uint8_t split_sectors = 0b00111111;
+		split_sectors = split_sectors & addr->sector;
+		printBits(sizeof(uint8_t),&(merged_cylinders));
+		printf("(%u)\tS: ",merged_cylinders);
+		printBits(sizeof(uint16_t),&(split_sectors));
+		printf("(%u)",split_sectors);
+		printf("\n * take with a grain of salt.. the LBA addresses and num sectors is probably much more accurate");
+}
 int main(int argc, char **argv) {
 	if (argc != 2) {
 		usage();
@@ -107,19 +122,17 @@ int main(int argc, char **argv) {
 		if (j % 16 == 0) {
 			printf("Partition %d\n", (j/16));
 		}
+
 		partition_data_t *p = (partition_data_t*)(memc+i);
 		printf("Active Byte: ");
 		printBits(sizeof(uint8_t),&(p->active));
-		printf("\nFirst Sector:");
-		printf("\tH: ");
-		printBits(sizeof(uint8_t),&(p->first_sector.track));
-		printf("(%u)\tS: ",p->first_sector.track);
-		printBits(sizeof(uint8_t),&(p->first_sector.sector));
-		printf("(%u)\tC: ",p->first_sector.sector);
-		printBits(sizeof(uint8_t),&(p->first_sector.cylinder));
-		printf("(%u)\tType: 0x%x",p->first_sector.cylinder,p->partition_type);
+		printf("\nFirst Sector (CHS): "); 
+		print_chs(&(p->first_sector));
+		printf("\tType: 0x%x",p->partition_type);
 		printf("\nAddress of first sector (LBA) %#x",p->lba_first_sector);	
 		printf("\tNumber of Sectors: %u",p->num_sectors);
+		printf("\nLast Sector (CHS):");
+		print_chs(&(p->last_sector));
 		printf("\n");
 		j+=16;
 	}
