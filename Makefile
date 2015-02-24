@@ -8,6 +8,7 @@ FAT=16
 all: $(TARGETS) $(UTILS)
 
 $(OBJDIR)/stage1: stage1.asm
+	@if [ ! -d $(OBJDIR) ]; then mkdir -p $(OBJDIR); fi
 	$(ASM) -f bin -o $@ $^
 
 $(OBJDIR)/stage1_5: stage1_5.asm
@@ -31,6 +32,7 @@ hdd_image: $(TARGETS) $(UTILS)
 	./bin/read $@
 
 $(UTILS): 
+	@if [ ! -d $(BINDIR) ]; then mkdir -p $(BINDIR); fi
 	$(MAKE) -C utils $@
 	cp utils/$@ $@
 

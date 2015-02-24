@@ -4,6 +4,8 @@
 #Binary artifacts
 obj/*
 bin/*
+utils/bin
+
 
 #Final disk image
 hdd_image

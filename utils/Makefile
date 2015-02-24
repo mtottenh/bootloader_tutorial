@@ -7,11 +7,12 @@ all: $(TARGETS)
 
 
 $(BINDIR)/install: boot_install.c
-	@echo "Creating bootloader installer"
+	@echo -e "\tCreating bootloader installer"
+	@if [ ! -d $(BINDIR) ]; then mkdir -p $(BINDIR) ; fi 
 	$(CC) $(CFLAGS) -o $@ $^
 
 $(BINDIR)/read: boot_read.c
-	@echo "Creating bootloader reader"
+	@echo -e "\t Creating bootloader reader"
 	$(CC) $(CFLAGS) -o $@ $^
 
 
