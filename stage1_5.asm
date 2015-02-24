@@ -23,7 +23,7 @@ start:
 a20_enabled:
 	
 
-.halt
+.halt:
 	jmp .halt
 print:
 	pusha
@@ -94,7 +94,7 @@ check_a20:
 	mov ax,0
 	je .exit_a20_test
 	mov ax,1
-.exit_a20_test
+.exit_a20_test:
 	pop si
 	pop di
 	pop es

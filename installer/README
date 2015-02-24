@@ -1,9 +1,0 @@
-# Disk utilities
-
-install: Takes a 512 Byte boot sector and places it into a hard drive image without 
-disrupting the existing partition table. 
-
-	- Useful for testing bootloaders
-
-read: Takes a harddrive image and dumps out partition table information.
-	Also tries to dump out FAT16 info if the hard drive image has and partitions of the right type.
