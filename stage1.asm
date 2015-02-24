@@ -7,14 +7,15 @@
 %define drive 0x80 ; drive
 %define os_sect 2
 %define ftabsect 2
+%define sectors 17
 
 [bits 16] ; Must start in 16 bit real mode
 [org 0] ; - Sets assembler location counter to 0 (load the following at 0x0h)
-
+; Enforce cs=0x7c0
 jmp 0x7c0:start ; Sets CS to 0x7c0, the default location the BIOS loads the bootloader code to.
 
 start:
-	; Initialize Registers
+	; Initialize data segment & extra segment = code segment
 	mov ax,cs
 	mov ds,ax
 	mov es,ax
@@ -50,7 +51,7 @@ start:
 	mov ax,loc ; Start location of stage 1.5 (Target addr)
 	mov es,ax
 	mov cl,os_sect  ; Start Read at sector 2
-	mov al,2 ; Number of sectors
+	mov al,sectors ; Number of sectors
 	call loadsector
 	jmp loc:0000
 
@@ -154,7 +155,16 @@ STRING:
 STRINGEND:
 TABLE:
 	db "0123456789ABCDEF", 0
-times 510-($-$$) db 0
+
+times 446-($-$$) db 0
+PART_1: 
+	times 16 db 0
+PART_2:
+	times 16 db 0
+PART_3:
+	times 16 db 0
+PART_4:
+	times 16 db 0
 ; MBR Boot Signature
 dw 0xaa55 ; Note - Little endian 0xaa55 =~ 0x55aa
 
