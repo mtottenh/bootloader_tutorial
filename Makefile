@@ -37,7 +37,9 @@ $(UTILS):
 	cp utils/$@ $@
 
 run:
-	qemu-system-x86_64 -hda hdd_image
+	if [ -e hdd_image ]; then rm hdd_image; fi
+	make hdd_image
+	qemu-system-x86_64 hdd_image
 clean:
 	-rm -rf $(TARGETS)
 	-rm -f $(BINDIR)/*
