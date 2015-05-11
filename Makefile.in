@@ -1,0 +1,105 @@
+# @configure_input@
+
+# Package-related substitution variables
+package        = @PACKAGE_NAME@
+version        = @PACKAGE_VERSION@
+tarname        = @PACKAGE_TARNAME@
+distdir        = $(tarname)-$(version)
+
+# Prefix-related substitution variables
+prefix         = @prefix@
+exec_prefix    = @exec_prefix@
+bindir         = @bindir@
+
+# Tool-related substitution variables
+CC             = @CC@
+DEFS           = @DEFS@
+LIBS           = @LIBS@
+CFLAGS         = @CFLAGS@
+CPPFLAGS       = @CPPFLAGS@
+INSTALL        = @INSTALL@
+INSTALL_DATA   = @INSTALL_DATA@
+INSTALL_PROGRAM= @INSTALL_PROGRAM@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+
+# VPATH-related substitution variables
+top_builddir   = @top_builddir@
+builddir       = @builddir@
+srcdir         = @srcdir@
+VPATH          = @srcdir@
+
+
+all clean boot utils:
+	$(MAKE) -C src $@
+
+# Packaging  & Testing
+dist: $(distdir).tar.gz
+
+$(distdir).tar.gz: FORCE $(distdir)
+	tar chof - $(distdir) | gzip -9 -c >$(distdir).tar.gz
+	rm -rf $(distdir)
+
+FORCE:
+	-rm -rf $(distdir) &> /dev/null
+	-rm $(distdir).tar.gz &> /dev/null
+
+$(distdir):
+	mkdir -p $@/src/boot
+	mkdir -p $@/src/utils
+	cp $(srcdir)/configure $@/configure
+	cp $(srcdir)/config.h.in $@/config.h.in
+	cp $(srcdir)/install-sh $@/install.sh
+	cp $(srcdir)/Makefile.in $@/Makefile.in
+	cp $(srcdir)/src/Makefile.in $@/src/Makefile.in
+	cp $(srcdir)/src/boot/Makefile.in $@/src/boot/Makefile.in
+	cp $(srcdir)/src/utils/Makefile.in $@/src/utils/Makefile.in
+	cp $(srcdir)/src/boot/stage1.asm $@/src/boot/stage1.asm
+	cp $(srcdir)/src/boot/stage1_5.asm $@/src/boot/stage1_5.asm
+	cp $(srcdir)/src/utils/boot_install.c $@/src/utils/boot_install.c
+	cp $(srcdir)/src/utils/boot_read.c $@/src/utils/boot_read.c
+
+distcheck: $(distdir).tar.gz
+	gzip -cd $+ | tar xvf -
+	cd $(distdir); ./configure
+	$(MAKE) -C $(distdir) all
+	$(MAKE) -C $(distdir) clean
+	rm -rf $(distdir)
+	@echo "*** Package $(distdir).tar.gz is ready for distribution."
+
+#Makefile regeneration comands
+Makefile: Makefile.in config.status
+	./config.status $@
+
+config.status: configure
+	./$@ --recheck
+
+
+.PHONY: all clean check dist distcheck
+
+$(OBJDIR)/stage1: stage1.asm
+	@if [ ! -d $(OBJDIR) ]; then mkdir -p $(OBJDIR); fi
+	$(ASM) -f bin -o $@ $^
+
+$(OBJDIR)/stage1_5: stage1_5.asm
+	$(ASM) -f bin -o $@ $^
+
+#hdd_image: $(TARGETS) $(UTILS)
+#	@echo -e "\n\n-- Creating Disk Image --\n"
+#	qemu-img create -f raw $@ 2048M
+#	@echo -e "\n-- Setting up Partition Table (1 Partition) -- \n"
+#	parted -s $@ mktable msdos
+#	parted -s $@ unit S mkpart p fat16 2048 64260
+#	parted -s $@ set 1 boot on
+#	@echo -e "\n-- Creating Filesystem (FAT$(FAT)) --\n"
+#	sudo kpartx -a $@
+#	export MTPT=`sudo kpartx -l $@ | awk '{print $$1}'`; sudo mkfs.vfat -n rootfs -F $(FAT) -S 512 -i deadbeef /dev/mapper/$$MTPT
+#	@echo -e "\n-- Installing Bootloader --\n"
+#	./bin/install $(TARGETS) ./$@
+#	sudo kpartx -d $@
+#	@echo -e "\n\n\n*** DUMP IMAGE INFORMATION ***\n"
+#	./bin/read $@
+
+#run:
+#	if [ -e hdd_image ]; then rm hdd_image; fi
+#	make hdd_image
+#	qemu-system-x86_64 hdd_image

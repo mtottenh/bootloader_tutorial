@@ -1,0 +1,42 @@
+# @configure_input@
+
+# Package-related substitution variables
+package = @PACKAGE_NAME@
+version = @PACKAGE_VERSION@
+tarname = @PACKAGE_TARNAME@
+distdir = $(tarname)-$(version)
+
+# Prefix-related substitution variables
+prefix 			= @prefix@
+exec_prefix = @exec_prefix@
+bindir 			= @bindir@
+
+# Compiler-related substitution variables
+CC 				= @CC@
+CFLAGS 		= @CFLAGS@
+CPPFLAGS 	= @CPPFLAGS@
+
+DEFS = @DEFS@
+LIBS = @LIBS@
+
+
+
+all: install_bootloader read_bootsector
+
+install_bootloader: boot_install.c
+	$(CC) $(CFLAGS) -o $@ $^
+
+read_bootsector: boot_read.c
+	$(CC) $(CFLAGS) -o $@ $^
+
+Makefile: Makefile.in ../../config.status
+	cd ../../ && ./config.status src/utils/$@
+
+../../config.status: ../../configure
+	cd ../../ && ./config.status --recheck
+
+clean:
+	-rm -rf *.o
+
+
+.PHONY: clean all

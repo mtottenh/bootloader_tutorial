@@ -5,7 +5,7 @@
 obj/*
 bin/*
 utils/bin
-
+Makefile
 
 #Final disk image
 hdd_image
