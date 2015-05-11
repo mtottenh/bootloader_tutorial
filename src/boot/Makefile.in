@@ -20,6 +20,9 @@ DEFS = @DEFS@
 LIBS = @LIBS@
 
 
+srcdir = @srcdir@
+VPATH = @srcdir@
+
 all: stage1.bin stage1_5.bin
 	@echo "CLFLAGS: $(CFLAGS)"
 
@@ -38,5 +41,6 @@ stage1.o: stage1.s
 
 clean:
 	-rm -rf *.bin
+	-rm *.o
 
 .PHONY: clean all

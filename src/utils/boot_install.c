@@ -18,31 +18,31 @@ disk\n\
  * arg3 - path to harddisk image\n";
 
 void usage(void) {
-	printf("%s",USAGE_STRING);
+    printf("%s",USAGE_STRING);
 }
 
 int check_file_access(FILE *s1, FILE *s1_5, int hdd, void *mem) {
   if (s1 == NULL ) {
-		perror("Error opening stage 1 ");
-		return 1;
-	}
-	if (s1_5 == NULL ) {
-		perror("Error opening stage 1.5");
-		return 1;
-	}
-	if (hdd == 0) {
-		perror("Error opening hdd image file");
-		return 1;
-	}
-	if (mem == MAP_FAILED) {
-		perror("Error mmaping hdd_image file");
-		return 1;
-	}
+        perror("Error opening stage 1 ");
+        return 1;
+    }
+    if (s1_5 == NULL ) {
+        perror("Error opening stage 1.5");
+        return 1;
+    }
+    if (hdd == 0) {
+        perror("Error opening hdd image file");
+        return 1;
+    }
+    if (mem == MAP_FAILED) {
+        perror("Error mmaping hdd_image file");
+        return 1;
+    }
   return 0;
 }
 
 FILE* embed_stage1(void* mem, FILE* file) {
-	fread(mem,sizeof(char),446,file);
+    fread(mem,sizeof(char),446,file);
   fclose(file);
   return 0;
 }
@@ -60,24 +60,24 @@ void write_boot_signature(void* mem) {
 }
 
 int main(int argc, char **argv) {
-	if (argc != 4) {
-		usage();
-		return 1;
-	}
+    if (argc != 4) {
+        usage();
+        return 1;
+    }
 
-	struct stat sb;
-	FILE* stage1_file = fopen(argv[1],"r");
-	FILE* stage1_5_file = fopen(argv[2],"r");
-	int hdd_image = open(argv[3], O_RDWR);
-  fstat(hdd_image,&sb);
-	void* mem = mmap(NULL,sb.st_size,PROT_WRITE|PROT_READ,MAP_SHARED,hdd_image,0);
+    struct stat sb;
+    FILE* stage1_file = fopen(argv[1],"r");
+    FILE* stage1_5_file = fopen(argv[2],"r");
+    int hdd_image = open(argv[3], O_RDWR);
+    fstat(hdd_image,&sb);
+    void* mem = mmap(NULL,sb.st_size,PROT_WRITE|PROT_READ,MAP_SHARED,hdd_image,0);
 
-  if (check_file_access(stage1_file,stage1_5_file,hdd_image,mem)) {
-      return 1;
-  }
-	stage1_file = embed_stage1(mem,stage1_file);
-  write_boot_signature(mem);
-  stage1_5_file = embed_stage1_5(mem,stage1_5_file);
-	close(hdd_image);
-	return 0;
+    if (check_file_access(stage1_file,stage1_5_file,hdd_image,mem)) {
+        return 1;
+    }
+    stage1_file = embed_stage1(mem,stage1_file);
+    write_boot_signature(mem);
+    stage1_5_file = embed_stage1_5(mem,stage1_5_file);
+    close(hdd_image);
+    return 0;
 }

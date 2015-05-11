@@ -19,7 +19,8 @@ CPPFLAGS 	= @CPPFLAGS@
 DEFS = @DEFS@
 LIBS = @LIBS@
 
-
+srcdir = @srcdir@
+VPATH = @srcdir@
 
 all: install_bootloader read_bootsector
 
