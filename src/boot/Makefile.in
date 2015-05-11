@@ -20,22 +20,23 @@ DEFS = @DEFS@
 LIBS = @LIBS@
 
 
-
-all:
+all: stage1.bin stage1_5.bin
 	@echo "CLFLAGS: $(CFLAGS)"
 
+stage1_5.bin: stage1_5.o
+	objcopy -O binary $^ -o $@
 
-#$(BINDIR)/install: boot_install.c
-#	@echo -e "\tCreating bootloader installer"
-#	@if [ ! -d $(BINDIR) ]; then mkdir -p $(BINDIR) ; fi
-#	$(CC) $(CFLAGS) -o $@ $^
+stage1_5.o: stage1_5.s
+	$(CC) $(CFLAGS) -c $^ -o $@
 
-#$(BINDIR)/read: boot_read.c
-#	@echo -e "\t Creating bootloader reader"
-#	$(CC) $(CFLAGS) -o $@ $^
+stage1.bin: stage1.o
+	objcopy -O binary $^ -o $@
 
+
+stage1.o: stage1.s
+	$(CC) $(CFLAGS) -c $^ -o $@
 
 clean:
-	-rm -rf *.o
+	-rm -rf *.bin
 
 .PHONY: clean all

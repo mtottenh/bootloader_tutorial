@@ -8,8 +8,12 @@ AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC
+AC_PROG_CC_STDC
 AC_PROG_INSTALL
-
+AC_CHECK_TOOL(OBJCOPY, objcopy)
+if test -z "$OBCOPY"; then
+		AC_MSG_ERROR([*** objcopy not found])
+fi
 # Checks for libraries.
 
 # Checks for header files.

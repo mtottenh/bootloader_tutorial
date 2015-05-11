@@ -1,11 +1,17 @@
 #vim swapfiles
 *.swp
+*.status
+*.log
+*.tar.gz
 
 #Binary artifacts
 obj/*
 bin/*
 utils/bin
 Makefile
-
+autoscan.log
+autom4te.cache/*
+install_bootloader
+read_bootsector
 #Final disk image
 hdd_image
