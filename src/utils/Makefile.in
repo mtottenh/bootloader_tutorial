@@ -37,6 +37,8 @@ Makefile: Makefile.in ../../config.status
 
 clean:
 	-rm -rf *.o
+	-rm read_bootsector
+	-rm install_bootloader
 
 
 .PHONY: clean all
