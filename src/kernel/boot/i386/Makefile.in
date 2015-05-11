@@ -1,0 +1,46 @@
+# @configure_input@
+
+# Package-related substitution variables
+package = @PACKAGE_NAME@
+version = @PACKAGE_VERSION@
+tarname = @PACKAGE_TARNAME@
+distdir = $(tarname)-$(version)
+
+# Prefix-related substitution variables
+prefix 			= @prefix@
+exec_prefix = @exec_prefix@
+bindir 			= @bindir@
+
+# Compiler-related substitution variables
+CC 				= @CC@
+CFLAGS 		= @CFLAGS@
+CPPFLAGS 	= @CPPFLAGS@
+
+DEFS = @DEFS@
+LIBS = @LIBS@
+
+
+srcdir = @srcdir@
+VPATH = @srcdir@
+
+all: stage1.bin stage1_5.bin
+	@echo "CLFLAGS: $(CFLAGS)"
+
+stage1_5.bin: stage1_5.o
+	objcopy -O binary $^  $@
+
+stage1_5.o: stage1_5.s
+	$(CC) $(CFLAGS) -c $^ -o $@
+
+stage1.bin: stage1.o
+	objcopy -O binary $^  $@
+
+
+stage1.o: stage1.s
+	$(CC) $(CFLAGS) -c $^ -o $@
+
+clean:
+	-rm -rf *.bin
+	-rm *.o
+
+.PHONY: clean all
