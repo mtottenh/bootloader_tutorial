@@ -53,8 +53,8 @@ $(distdir):
 	cp $(srcdir)/src/Makefile.in $@/src/Makefile.in
 	cp $(srcdir)/src/boot/Makefile.in $@/src/boot/Makefile.in
 	cp $(srcdir)/src/utils/Makefile.in $@/src/utils/Makefile.in
-	cp $(srcdir)/src/boot/stage1.asm $@/src/boot/stage1.asm
-	cp $(srcdir)/src/boot/stage1_5.asm $@/src/boot/stage1_5.asm
+	cp $(srcdir)/src/boot/stage1.s $@/src/boot/stage1.s
+	cp $(srcdir)/src/boot/stage1_5.s $@/src/boot/stage1_5.s
 	cp $(srcdir)/src/utils/boot_install.c $@/src/utils/boot_install.c
 	cp $(srcdir)/src/utils/boot_read.c $@/src/utils/boot_read.c
 
