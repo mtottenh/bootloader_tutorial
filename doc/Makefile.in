@@ -1,0 +1,4 @@
+
+
+doc: %.md
+	pandoc -f markdown_github -t pdf $^
