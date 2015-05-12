@@ -32,6 +32,9 @@ VPATH          = @srcdir@
 all clean boot utils:
 	$(MAKE) -C src $@
 
+doc:
+	$(MAKE) -C doc $@
+
 # Packaging  & Testing
 dist: $(distdir).tar.gz
 

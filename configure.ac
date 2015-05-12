@@ -11,9 +11,16 @@ AC_PROG_CC
 AC_PROG_CC_STDC
 AC_PROG_INSTALL
 AC_CHECK_TOOL(OBJCOPY, objcopy)
+AC_CHECK_TOOL(PANDOC, pandoc)
+
 if test -z "$OBJCOPY"; then
 		AC_MSG_ERROR([*** objcopy not found])
 fi
+
+if test -z "$PANDOC"; then
+        AC_MSG_ERROR([*** pandoc not found])
+fi
+
 # Checks for libraries.
 
 # Checks for header files.
@@ -31,6 +38,9 @@ AC_FUNC_MMAP
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile
-                 src/boot/Makefile
-                 src/utils/Makefile])
+                 src/kernel/Makefile
+                 src/kernel/boot/Makefile
+                 src/kernel/boot/i386/Makefile
+                 src/utils/Makefile
+                 doc/Makefile])
 AC_OUTPUT

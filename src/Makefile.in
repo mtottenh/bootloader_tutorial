@@ -23,6 +23,6 @@ LIBS = @LIBS@
 
 all clean:
 	$(MAKE) -C utils $@
-	$(MAKE) -C boot $@
+	$(MAKE) -C kernel $@
 
 .PHONY: clean all

@@ -19,18 +19,10 @@ CPPFLAGS 	= @CPPFLAGS@
 DEFS = @DEFS@
 LIBS = @LIBS@
 
-srcdir = @srcdir@
-VPATH = @srcdir@
 
-all: boot kernel
 
-boot:
-	$(MAKE) -C boot all
+all boot clean:
+	$(MAKE) -C i386 $@
 
-kernel: main.c
-	$(CC) $(CFLAGS) -c $^ -o $@.o
-
-clean: boot
-	-rm *.o
 
 .PHONY: clean all boot
