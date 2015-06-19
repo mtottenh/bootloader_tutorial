@@ -4,3 +4,7 @@ compiler:
     - clang
     - gcc
 script: ./autogen.sh && ./configure && make
+
+addons:
+    apt_packages:
+        - pandoc
