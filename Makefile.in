@@ -77,7 +77,7 @@ config.status: configure
 	./$@ --recheck
 
 
-.PHONY: all clean check dist distcheck
+.PHONY: all clean check dist distcheck doc
 
 $(OBJDIR)/stage1: stage1.asm
 	@if [ ! -d $(OBJDIR) ]; then mkdir -p $(OBJDIR); fi

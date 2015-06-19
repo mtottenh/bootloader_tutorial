@@ -1,4 +1,33 @@
+# @configure_input@
+
+# Package-related substitution variables
+package        = @PACKAGE_NAME@
+version        = @PACKAGE_VERSION@
+tarname        = @PACKAGE_TARNAME@
+distdir        = $(tarname)-$(version)
+
+# Prefix-related substitution variables
+prefix         = @prefix@
+exec_prefix    = @exec_prefix@
+bindir         = @bindir@
+
+# Tool-related substitution variables
+CC             = @CC@
+DEFS           = @DEFS@
+LIBS           = @LIBS@
+CFLAGS         = @CFLAGS@
+CPPFLAGS       = @CPPFLAGS@
+INSTALL        = @INSTALL@
+INSTALL_DATA   = @INSTALL_DATA@
+INSTALL_PROGRAM= @INSTALL_PROGRAM@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+
+# VPATH-related substitution variables
+srcdir         = @srcdir@
+VPATH          = @srcdir@
 
 
-doc: %.md
-	pandoc -f markdown_github -t pdf $^
+
+
+doc: project_structure.md
+	pandoc -f markdown_github -t html $^ -s -o project_structure.html
